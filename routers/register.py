@@ -89,7 +89,7 @@ def send_password_email(email, password, username, name):
     server.quit()
 
 # Signup endpoint
-@router.post("/createaccount")
+@router.post("/register")
 async def create_account(user: RegisterUser, db: Session = Depends(get_db)):
     # Checking if username or email already exists in the database
     if account_exists(username=user.username, db=db):
@@ -106,7 +106,7 @@ async def create_account(user: RegisterUser, db: Session = Depends(get_db)):
     db.commit()
 
     # Sending email about the details
-    send_password_email(user.email, user.password, user.username, user.name)
+    #send_password_email(user.email, user.password, user.username, user.name)
 
     return {"message": "User registered successfully please check your email."}
 
