@@ -9,7 +9,7 @@ DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT')  # Default PostgreSQL port
 DB_NAME = os.getenv('DB_NAME')
 
-DATABASE_URL = f"postgresql://admin:sabzWork1305@db:5432/postgres"
+DATABASE_URL = f"postgresql://admin:sabzWork1305@localhost:5432/postgres"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
