@@ -46,5 +46,6 @@ async def login(request: Request,username: str = Form(...),password:str = Form(.
     user_details = db.query(User).filter(User.username == username).first()
     if user_details:
         return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse("home.html", {"request": request})
 
     # Comparing the password with the hashed password

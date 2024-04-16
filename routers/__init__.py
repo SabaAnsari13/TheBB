@@ -1,15 +1,10 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+db_name="db"
 
-# PostgreSQL database connection Configuration
-DB_USERNAME = os.getenv('DB_USERNAME')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')  # Default PostgreSQL port
-DB_NAME = os.getenv('DB_NAME')
+DATABASE_URL = f"postgresql://postgres:pOst31@host.docker.internal:5432/postgres"
 
-DATABASE_URL = f"postgresql://admin:sabzWork1305@db:5432/postgres"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

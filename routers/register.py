@@ -104,7 +104,7 @@ def send_password_email(email, password, username, name):
 
 # Signup endpoint
 @router.post("/register")
-async def create_account(username: str = Form(...),password:str = Form(...) ,db: Session = Depends(get_db)):
+async def create_account(request:Request,username: str = Form(...),password:str = Form(...) ,db: Session = Depends(get_db)):
     # Checking if username or email already exists in the database
     if account_exists(username=username, db=db):
         return {"message": "Username already exists."}
