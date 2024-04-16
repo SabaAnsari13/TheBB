@@ -1,13 +1,19 @@
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
 load_dotenv()
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from routers import register
 from routers import login
+from routers import search
 
 app=FastAPI()
+
+templates = Jinja2Templates(directory="frontend/templates")
 
 origins = [
     "http://localhost:3000",
@@ -23,7 +29,26 @@ app.add_middleware(
 
 app.include_router(login.router)
 app.include_router(register.router)
+app.include_router(search.router)
+app.mount("/static",StaticFiles(directory="static"),name="static")
 
-@app.get('/')
-def root():
-    return {'root': '/'}
+# Define a route to render an HTML page
+@app.get("/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    # Use the 'templates' object to render the 'index.html' template
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/register", response_class=HTMLResponse)
+async def read_item(request: Request):
+    # Use the 'templates' object to render the 'index.html' template
+    return templates.TemplateResponse("reg.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+async def read_item(request: Request):
+    # Use the 'templates' object to render the 'index.html' template
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/home", response_class=HTMLResponse)
+async def read_item(request: Request):
+    # Use the 'templates' object to render the 'index.html' template
+    return templates.TemplateResponse("home.html", {"request": request})
