@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheBookwormBurrow - Homepage</title>
-    <link rel="stylesheet" href="{{ url_for('static',path='/home.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',path='home.css') }}">
 </head>
 <body>
     <header>
@@ -15,12 +15,12 @@
                 <li><a href="#">Explore</a></li>
                 <li><a href="#">My Library</a></li>
                 <li><a href="#">Community</a></li>
-                <li><a href="/login">Sign In</a></li>
-                <li><a href="/register">Sign Up</a></li>
+                <li id="auth-link"><a href="/login">Sign In</a></li>
+                <li id="auth-register-link"><a href="/register">Sign Up</a></li>
             </ul>
             <div id="search-bar">
-                <input type="text" id="search-input" placeholder="Search books...">
-                <button id="search-button">Search</button>
+                <input type="text" id="search-input" name="title" placeholder="Search books...">
+                <button type="submit" id="search-button">Search</button>
             </div>
         </nav>
     </header>
@@ -30,11 +30,11 @@
         <section class="featured-books">
             <h2>Featured Books</h2>
             <div class="book-list">
-                <img src="img1.jpg" width="200" height="320" alt="To Kill A Mockingbird">
-                <img src="images/img2.jpg" width="200" height="320" alt="The Notebook">
-                <img src="images/img3.jpg" width="200" height="320" alt="The Diary Of A Young Girl">
-                <img src="images/img4.jpg" width="200" height="320" alt="The Silent Patient">
-                <img src="images/img5.jpg" width="200" height="320" alt="The Midnight Library">
+                <img src="{{ url_for('static', path='images/img1.jpg') }}" width="200" height="320" alt="To Kill A Mockingbird">
+                <img src="{{ url_for('static', path='images/img2.jpg') }}" width="200" height="320" alt="The Notebook">
+                <img src="{{ url_for('static', path='images/img3.jpg') }}" width="200" height="320" alt="The Diary Of A Young Girl">
+                <img src="{{ url_for('static', path='images/img4.jpg') }}" width="200" height="320" alt="The Silent Patient">
+                <img src="{{ url_for('static', path='images/img5.jpg') }}" width="200" height="320" alt="The Midnight Library">
             </div>
         </section>
         
@@ -44,12 +44,19 @@
                 <!-- Latest updates will be dynamically added here -->
             </ul>
         </section>
+
+        <section class="search-results">
+            <h2>Search Results</h2>
+            <div id="results-container">
+                
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2024 TheBookwormBurrow. All rights reserved.</p>
     </footer>
 
-    <script src="home.js"></script>
+    <script src="{{ url_for('static', path='home.js') }}"></script>
 </body>
 </html>

@@ -1,51 +1,33 @@
-from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel, EmailStr
-from fastapi import FastAPI, Depends, Form, HTTPException, APIRouter, Request
-from .tables import User
-from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
-from sqlalchemy.ext.declarative import declarative_base
-import smtplib
-import os
-import random
-from dotenv import load_dotenv
-from . import get_db
+from fastapi import APIRouter, Depends, HTTPException, Form, Request
 from sqlalchemy.orm import Session
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from fastapi.templating import Jinja2Templates
+
+from . import auth
+from . import get_db
+from .schemas import Token, UserActivityCreate
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from .activity import log_activity
+
 
 router = APIRouter()
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Base class for declarative models
-Base = declarative_base()
-
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# OAuth2 password bearer for token URL
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 templates = Jinja2Templates(directory="frontend/templates")
 
-# Pydantic model for user login
-class Login(BaseModel):
-    username: str
-    password: str
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# Function to verify password
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-# Login endpoint
 @router.post("/login")
-async def login(request: Request,username: str = Form(...),password:str = Form(...) , db: Session = Depends(get_db)):
-    # Check if logging in using either email or username
-    user_details = db.query(User).filter(User.username == username).first()
-    if user_details:
-        return templates.TemplateResponse("home.html", {"request": request})
-    return templates.TemplateResponse("home.html", {"request": request})
+async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = auth.authenticate_user(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token = auth.create_access_token(data={"sub": user.username})
+    await log_activity(UserActivityCreate(activity_type="login"), db, user)
+    return {"access_token": access_token, "token_type": "bearer"}
 
-    # Comparing the password with the hashed password
+@router.get("/home")
+async def read_home(request: Request, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    user = auth.get_current_user(token, db)
+    return templates.TemplateResponse("home.html", {"request": request, "username": user.username})

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - TheBookwormBurrow</title>
+    <link rel="stylesheet" href="{{ url_for('static',path='bookdetails.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>TheBookwormBurrow</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#">Explore</a></li>
+                <li><a href="#">My Library</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="/login">Sign In</a></li>
+                <li><a href="/register">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="book-details">
+            <h2>{{ book.title }}</h2>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p>{{ book.description }}</p>
+            <img src="{{ url_for('static', path='images/' + book.cover_image) }}" alt="{{ book.title }}">
+        </section>
+        
+        <section class="book-reviews">
+            <h2>Reviews</h2>
+            <ul>
+                {% for review in reviews %}
+                <li>
+                    <p><strong>Rating:</strong> {{ review.rating }}</p>
+                    <p>{{ review.review_text }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="add-review">
+            <h2>Add a Review</h2>
+            <form id="review-form">
+                <label for="review-text">Review:</label>
+                <textarea id="review-text" name="review_text" required></textarea>
+                <label for="rating">Rating:</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TheBookwormBurrow. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('review-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const reviewText = document.getElementById('review-text').value;
+            const rating = document.getElementById('rating').value;
+            const bookId = "{{ book.id }}"; // Pass book ID dynamically
+
+            try {
+                const response = await axios.post(`/books/${bookId}/reviews`, {
+                    review_text: reviewText,
+                    rating: rating
+                });
+
+                if (response.status === 200) {
+                    // Add the new review to the review list
+                    const reviewList = document.querySelector('.book-reviews ul');
+                    const newReview = document.createElement('li');
+                    newReview.innerHTML = `<p><strong>Rating:</strong> ${rating}</p><p>${reviewText}</p>`;
+                    reviewList.appendChild(newReview);
+
+                    // Clear the form
+                    document.getElementById('review-form').reset();
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+            }
+        });
+    </script>
+</body>
+</html>
