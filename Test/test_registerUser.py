@@ -10,7 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-class TestRegUser():
+class TestRegisterUser():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
@@ -18,13 +18,13 @@ class TestRegUser():
   def teardown_method(self, method):
     self.driver.quit()
   
-  def test_regUser(self):
-    self.driver.get("http://localhost:8000/")
+  def test_registerUser(self):
+    self.driver.get("http://127.0.0.1:8000/")
     self.driver.set_window_size(732, 852)
     self.driver.find_element(By.LINK_TEXT, "Register here").click()
     self.driver.find_element(By.ID, "username").click()
-    self.driver.find_element(By.ID, "username").send_keys("jemi")
+    self.driver.find_element(By.ID, "username").send_keys("Priyanka")
     self.driver.find_element(By.ID, "password").click()
-    self.driver.find_element(By.ID, "password").send_keys("0428")
+    self.driver.find_element(By.ID, "password").send_keys("3142")
     self.driver.find_element(By.CSS_SELECTOR, "button").click()
   

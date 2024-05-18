@@ -10,7 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-class TestLogtoReg():
+class TestLogintoRegister():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
@@ -18,8 +18,8 @@ class TestLogtoReg():
   def teardown_method(self, method):
     self.driver.quit()
   
-  def test_logtoReg(self):
-    self.driver.get("http://localhost:8000/")
+  def test_logintoRegister(self):
+    self.driver.get("http://127.0.0.1:8000/")
     self.driver.set_window_size(732, 852)
     self.driver.find_element(By.LINK_TEXT, "Register here").click()
   

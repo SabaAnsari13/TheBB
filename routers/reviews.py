@@ -1,25 +1,29 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from fastapi.responses import HTMLResponse
 from . import get_db
-from .tables import Review, Book, User
-from .schemas import ReviewCreate, ReviewResponse
-from . import get_db
+from .tables import Book, Review
+from .schemas import BookDetailsResponse, ReviewResponse
+from fastapi.templating import Jinja2Templates
 from typing import List
 
 router = APIRouter()
+templates = Jinja2Templates(directory="frontend/templates")  
 
-@router.post("/books/{book_id}/reviews", response_model=ReviewResponse)
-async def create_review(book_id: int, review: ReviewCreate, current_user: str, db: Session = Depends(get_db)):
-    book = db.query(Book).filter(Book.id == book_id).first()
+@router.get("/books/{book_id}/details", response_class=HTMLResponse)
+async def get_book_details(request: Request, book_id: int, db: Session = Depends(get_db)):
+    # Query the database to retrieve the book details by its ID
+    book = db.query(Book).filter(Book.book_id == book_id).first()
+
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    db_review = Review(user_id=current_user.id, book_id=book_id, review_text=review.review_text, rating=review.rating)
-    db.add(db_review)
-    db.commit()
-    db.refresh(db_review)
+    # Query the database to retrieve the reviews associated with the book
+    reviews = db.query(Review).filter(Review.book_id == book_id).all()
 
-    return db_review
+    # Render the book details and associated reviews in the bookreview.html template
+    return templates.TemplateResponse("bookdetails.html", {"request": request, "book": book, "reviews": reviews})
+
 
 @router.get("/books/{book_id}/reviews", response_model=List[ReviewResponse])
 async def get_reviews(book_id: int, db: Session = Depends(get_db)):

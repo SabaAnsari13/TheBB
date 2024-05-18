@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List
 from .tables import Book, Review
@@ -9,6 +9,8 @@ from fastapi.templating import Jinja2Templates
 
 router = APIRouter()
 templates = Jinja2Templates(directory="frontend/templates")
+
+
 
 @router.get("/search", response_model=List[BookResponse])
 async def search_books(
@@ -20,6 +22,7 @@ async def search_books(
     query = db.query(Book)
     
     if title:
+        print('hi')
         query = query.filter(Book.title.ilike(f"%{title}%"))
     if author:
         query = query.filter(Book.author.ilike(f"%{author}%"))
@@ -33,7 +36,7 @@ async def search_books(
     
     return results
 
-@router.get("/search/{book_id}", response_class=HTMLResponse)
+@router.get("/search/{book_id}", response_class=JSONResponse)
 async def book_details(request: Request, book_id: int, db: Session = Depends(get_db)):
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:

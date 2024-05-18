@@ -64,9 +64,10 @@
 
             const reviewText = document.getElementById('review-text').value;
             const rating = document.getElementById('rating').value;
-            const bookId = "{{ book.id }}"; // Pass book ID dynamically
+            const bookId = "{{ book.book_id }}"; // Pass book ID dynamically
 
             try {
+                console.log(bookId)
                 const response = await axios.post(`/books/${bookId}/reviews`, {
                     review_text: reviewText,
                     rating: rating

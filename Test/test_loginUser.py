@@ -19,11 +19,11 @@ class TestLoginUser():
     self.driver.quit()
   
   def test_loginUser(self):
-    self.driver.get("http://localhost:8000/")
+    self.driver.get("http://127.0.0.1:8000/login")
     self.driver.set_window_size(732, 852)
     self.driver.find_element(By.ID, "username").click()
-    self.driver.find_element(By.ID, "username").send_keys("sam")
+    self.driver.find_element(By.ID, "username").send_keys("Saba")
     self.driver.find_element(By.ID, "password").click()
-    self.driver.find_element(By.ID, "password").send_keys("123")
+    self.driver.find_element(By.ID, "password").send_keys("3150#ssa")
     self.driver.find_element(By.CSS_SELECTOR, "button").click()
   

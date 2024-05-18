@@ -50,3 +50,5 @@ async def read_item(request: Request):
 async def read_item(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
+
+

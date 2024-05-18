@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import List
 
 class UserBase(BaseModel):
     username: str
@@ -23,7 +24,7 @@ class TokenData(BaseModel):
     username: str | None = None
 
 class BookResponse(BaseModel):
-    id: int
+    book_id: int
     title: str
     author: str
     isbn: str
@@ -31,7 +32,24 @@ class BookResponse(BaseModel):
     cover_image: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+
+
+class ReviewResponse(BaseModel):
+    id: int
+    user_id: int
+    book_id: int
+    review_text: str
+    rating: int
+
+class BookDetailsResponse(BaseModel):
+    book_id: int
+    title: str
+    author: str
+    isbn: str
+    description: str
+    cover_image: str
+    reviews: List[ReviewResponse]
 
 class ReviewCreate(BaseModel):
     review_text: str
