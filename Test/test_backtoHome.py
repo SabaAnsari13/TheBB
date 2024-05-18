@@ -10,7 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-class TestViewBook():
+class TestBacktoHome():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
@@ -18,13 +18,8 @@ class TestViewBook():
   def teardown_method(self, method):
     self.driver.quit()
   
-  def test_viewBook(self):
-    self.driver.get("http://localhost:8000/")
+  def test_backtoHome(self):
+    self.driver.get("http://localhost:8000/books/1/details")
     self.driver.set_window_size(732, 852)
-    self.driver.find_element(By.ID, "username").click()
-    self.driver.find_element(By.ID, "username").send_keys("Saba")
-    self.driver.find_element(By.ID, "password").click()
-    self.driver.find_element(By.ID, "password").send_keys("3150#ssa")
-    self.driver.find_element(By.CSS_SELECTOR, "button").click()
-    self.driver.find_element(By.CSS_SELECTOR, "a:nth-child(1) > img").click()
+    self.driver.find_element(By.LINK_TEXT, "Home").click()
   
