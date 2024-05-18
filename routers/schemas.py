@@ -49,9 +49,8 @@ class ReviewResponse(BaseModel):
 class UserActivityBase(BaseModel):
     user_id: int
     activity_type: str
+    user: str
 
-class UserActivityCreate(UserActivityBase):
-    pass
 
 class UserActivity(UserActivityBase):
     id: int

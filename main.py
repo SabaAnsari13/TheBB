@@ -9,7 +9,6 @@ from routers import login
 from routers import register
 from routers import search
 from routers import reviews
-from routers import activity
 from routers import get_db
 import os
 
@@ -34,7 +33,6 @@ app.include_router(login.router)
 app.include_router(register.router)
 app.include_router(search.router)
 app.include_router(reviews.router)
-app.include_router(activity.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):

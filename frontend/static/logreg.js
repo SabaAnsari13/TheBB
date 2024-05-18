@@ -1,8 +1,9 @@
-document.getElementById('login-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    
+document.getElementById('login-form').addEventListener('submit', async function (event) {
+    event.preventDefault();  // Prevent the default form submission
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
 
     try {
         const response = await fetch('/login', {
@@ -11,20 +12,18 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                'username': username,
-                'password': password
+                username: username,
+                password: password
             }),
         });
 
         if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.access_token);
             window.location.href = '/home';
         } else {
-            // Handle error
-            alert('Login failed. Please check your username and password.');
+            const result = await response.json();
+            errorMessage.textContent = result.detail;
         }
     } catch (error) {
-        console.error('Error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
     }
 });

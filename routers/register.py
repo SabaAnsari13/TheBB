@@ -1,10 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Form, Request
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
-import sys
-sys.path.append("..")  # Add the parent directory to the Python path
-import routers.auth as auth
-from routers.auth import get_password_hash
 from routers import get_db
 from .tables import User
 
@@ -17,8 +13,7 @@ async def create_account(request: Request, username: str = Form(...), password: 
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
 
-    hashed_password = auth.get_password_hash(password)
-    db_user = User(username=username, hashed_password=hashed_password)
+    db_user = User(username=username, hashed_password=password)
     db.add(db_user)
     db.commit()
 

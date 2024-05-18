@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import get_db
 from .tables import Review, Book, User
-from .auth import get_current_user
 from .schemas import ReviewCreate, ReviewResponse
 from . import get_db
 from typing import List
@@ -10,7 +9,7 @@ from typing import List
 router = APIRouter()
 
 @router.post("/books/{book_id}/reviews", response_model=ReviewResponse)
-async def create_review(book_id: int, review: ReviewCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def create_review(book_id: int, review: ReviewCreate, current_user: str, db: Session = Depends(get_db)):
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")

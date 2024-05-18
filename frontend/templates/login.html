@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - TheBookwormBurrow</title>
-    <link rel="stylesheet" href="{{ url_for('static',path='logreg.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='logreg.css') }}">
 </head>
 <body>
     <div class="container">
+        <h1>TheBookwormBurrow</h1>
         <h1>Login</h1>
         <form id="login-form" method="post" action="/login">
             <div class="form-group">
@@ -21,7 +22,12 @@
             <button type="submit">Login</button>
         </form>
         <p class="register-link">Don't have an account? <a href="/register">Register here</a></p>
+        <div id="error-message" style="color: red;"></div>
     </div>
+
+    <footer>
+        <p>&copy; 2024 TheBookwormBurrow. All rights reserved.</p>
+    </footer>
 
     <script src="{{ url_for('static', path='logreg.js') }}"></script>
 </body>
