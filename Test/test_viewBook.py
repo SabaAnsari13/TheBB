@@ -19,7 +19,7 @@ class TestViewBook():
     self.driver.quit()
   
   def test_viewBook(self):
-    self.driver.get("http://127.0.0.1:8000/")
+    self.driver.get("http://0.0.0.0:8000/")
     self.driver.set_window_size(732, 852)
     self.driver.find_element(By.ID, "username").click()
     self.driver.find_element(By.ID, "username").send_keys("Saba")
