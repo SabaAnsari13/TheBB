@@ -19,7 +19,7 @@ class TestRegisterUser():
     self.driver.quit()
   
   def test_registerUser(self):
-    self.driver.get("http://0.0.0.0:8000/")
+    self.driver.get("http://localhost:8000/")
     self.driver.set_window_size(732, 852)
     self.driver.find_element(By.LINK_TEXT, "Register here").click()
     self.driver.find_element(By.ID, "username").click()
